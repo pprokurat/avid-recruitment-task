@@ -35,4 +35,11 @@ public class Folder {
         this.assets = assets;
     }
 
+
+    public String toResultString() {
+        return "{" +
+                "\"id\":" + id +
+                ",\"path\":\"" + path +
+                "\"}";
+    }
 }

@@ -30,9 +30,7 @@ public class Application implements CommandLineRunner {
         folders = new ArrayList<Folder>();
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         JsonNode jsonNode = objectMapper.readValue(new File("data.json"), JsonNode.class);
-
         Iterator<Map.Entry<String,JsonNode>> iterator = jsonNode.fields();
 
         while(iterator.hasNext()){
@@ -45,12 +43,35 @@ public class Application implements CommandLineRunner {
 
     }
 
-    //get the folder objects list
-    public static List<Folder> getFolders() {
-        return folders;
+    //return the folder list as target JSON
+    public static JsonNode getFolders() throws IOException {
+        String resultsString = "{\"results\":[";
+
+        Iterator<Folder> iterator = folders.iterator();
+
+        //add folders' IDs and paths to the string using Folder class toResultString() method
+        while(iterator.hasNext()){
+            Folder folder = iterator.next();
+
+            if(!iterator.hasNext()){
+                resultsString = resultsString.concat(folder.toResultString());
+                break;
+            }
+            else{
+                resultsString = resultsString.concat(folder.toResultString()+",");
+            }
+        }
+
+        resultsString = resultsString.concat("]}");
+
+        //map result string to target JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode results = objectMapper.readTree(resultsString);
+
+        return results;
     }
 
-    //get particular folder object from the list (by ID)
+    //return particular folder object from the list (by ID)
     public static Folder getFolderById(Integer folderId) {
         Folder targetFolder = new Folder();
         for (Folder folder : folders) {
