@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,21 +31,28 @@ public class Application implements CommandLineRunner {
         folders = new ArrayList<Folder>();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readValue(new File("data.json"), JsonNode.class);
-        Iterator<Map.Entry<String,JsonNode>> iterator = jsonNode.fields();
+        File inputFile = new File("data.json");
+        FileInputStream fis = new FileInputStream(inputFile);
+        int iByteCount = fis.read();
 
-        while(iterator.hasNext()){
-            Map.Entry<String, JsonNode> currentIterator = iterator.next();
-            String key = currentIterator.getKey();
-            Folder folder = objectMapper.readValue(currentIterator.getValue().toString(),Folder.class);
-            folder.setPath(key);
-            folders.add(folder);
+        //populate the folders list only if the input file is not empty
+        if(!(iByteCount == -1)){
+            JsonNode jsonNode = objectMapper.readValue(inputFile, JsonNode.class);
+            Iterator<Map.Entry<String,JsonNode>> iterator = jsonNode.fields();
+
+            while(iterator.hasNext()){
+                Map.Entry<String, JsonNode> currentIterator = iterator.next();
+                String key = currentIterator.getKey();
+                Folder folder = objectMapper.readValue(currentIterator.getValue().toString(),Folder.class);
+                folder.setPath(key);
+                folders.add(folder);
+            }
         }
 
     }
 
     //return the folder list as target JSON
-    public static JsonNode getFolders() throws IOException {
+    public static JsonNode getFoldersList() throws IOException {
         String resultsString = "{\"results\":[";
 
         Iterator<Folder> iterator = folders.iterator();

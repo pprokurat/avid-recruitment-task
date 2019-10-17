@@ -17,8 +17,8 @@ public class RequestController {
 
     //return list of all folders at "/" endpoint at GET request
     @RequestMapping(name="/", method = GET)
-    public JsonNode returnFolders() throws IOException {
-        return Application.getFolders();
+    public JsonNode returnFoldersList() throws IOException {
+        return Application.getFoldersList();
     }
 
     //return folder data by ID at "/{folderId}" endpoint at GET request
