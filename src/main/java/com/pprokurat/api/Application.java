@@ -18,13 +18,17 @@ import java.util.Map;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-    private static List<Folder> folders;
+    public static List<Folder> folders;
 
     public static void main(String[] args){
         SpringApplication.run(Application.class, args);
     }
 
-    //after running application load folders data from JSON file into a list of folder objects
+    /**
+     * after running the application load folders data from JSON file into a list of folder objects
+     * @param args
+     * @throws IOException
+     */
     @Override
     public void run(String[] args) throws IOException {
 
@@ -49,46 +53,6 @@ public class Application implements CommandLineRunner {
             }
         }
 
-    }
-
-    //return the folder list as target JSON
-    public static JsonNode getFoldersList() throws IOException {
-        String resultsString = "{\"results\":[";
-
-        Iterator<Folder> iterator = folders.iterator();
-
-        //add folders' IDs and paths to the string using Folder class toResultString() method
-        while(iterator.hasNext()){
-            Folder folder = iterator.next();
-
-            if(!iterator.hasNext()){
-                resultsString = resultsString.concat(folder.toResultString());
-                break;
-            }
-            else{
-                resultsString = resultsString.concat(folder.toResultString()+",");
-            }
-        }
-
-        resultsString = resultsString.concat("]}");
-
-        //map result string to target JSON
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode results = objectMapper.readTree(resultsString);
-
-        return results;
-    }
-
-    //return particular folder object from the list (by ID)
-    public static Folder getFolderById(Integer folderId) {
-        Folder targetFolder = new Folder();
-        for (Folder folder : folders) {
-            if (folderId.equals(folder.getId())) {
-                targetFolder = folder;
-                break;
-            }
-        }
-        return targetFolder;
     }
 
 }
