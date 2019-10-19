@@ -1,32 +1,32 @@
 package com.pprokurat.api.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.pprokurat.api.dto.FolderDto;
 import com.pprokurat.api.model.Folder;
-import com.pprokurat.api.service.FoldersService;
+import com.pprokurat.api.service.FolderService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
-public class FoldersController {
+public class FolderController {
 
-    private final FoldersService service;
+    private final FolderService service;
 
-    public FoldersController(FoldersService service) {
+    public FolderController(FolderService service) {
         this.service = service;
     }
 
     /**
      *
      * @return list of all folders at "/" endpoint at GET request
-     * @throws IOException
      */
     @RequestMapping(name="/", method = GET)
-    public JsonNode returnFoldersList() throws IOException {
+    public List<FolderDto> returnFoldersList() {
         return service.getFoldersList();
     }
 
