@@ -3,11 +3,12 @@ package com.pprokurat.api.controller;
 import com.pprokurat.api.dto.FolderDto;
 import com.pprokurat.api.model.Folder;
 import com.pprokurat.api.service.FolderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,7 +38,16 @@ public class FolderController {
      */
     @RequestMapping(value="/{folderId}", method = GET)
     public Folder returnFolderById(@PathVariable("folderId") Integer folderId) {
-        return service.getFolderById(folderId);
+
+        Folder targetFolder = service.getFolderById(folderId);
+        Integer notFoundErrorCode = -1;
+
+        if(notFoundErrorCode.equals(targetFolder.getId())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error: folder with provided ID not found");
+        }
+        else{
+            return targetFolder;
+        }
     }
 
 }

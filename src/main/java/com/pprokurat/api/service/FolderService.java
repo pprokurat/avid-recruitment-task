@@ -5,6 +5,8 @@ import com.pprokurat.api.model.Folder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +35,8 @@ public class FolderService {
             targetFoldersList.add(dto);
         }
 
+        Collections.sort(targetFoldersList, new SortById());
+
         return targetFoldersList;
     }
 
@@ -43,6 +47,7 @@ public class FolderService {
      */
     public Folder getFolderById(Integer folderId) {
         Folder targetFolder = new Folder();
+        targetFolder.setId(-1);
 
         Iterator<Folder> iterator = folderRepository.getFoldersList().iterator();
 
@@ -58,4 +63,11 @@ public class FolderService {
         return targetFolder;
     }
 
+}
+
+class SortById implements Comparator<FolderDto> {
+
+    public int compare(FolderDto a, FolderDto b) {
+        return a.getId()-b.getId();
+    }
 }
