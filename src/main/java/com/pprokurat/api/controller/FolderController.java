@@ -22,29 +22,25 @@ public class FolderController {
     }
 
     /**
-     *
      * @return list of all folders at "/" endpoint at GET request
      */
-    @RequestMapping(name="/", method = GET)
+    @RequestMapping(name = "/", method = GET)
     public List<FolderDto> returnFoldersList() {
         return service.getFoldersList();
     }
 
     /**
-     *
      * @param folderId at "/{folderId}" endpoint at GET request
      * @return folder data by ID at "/{folderId}" endpoint at GET request
      */
-    @RequestMapping(value="/{folderId}", method = GET)
+    @RequestMapping(value = "/{folderId}", method = GET)
     public Folder returnFolderById(@PathVariable("folderId") Integer folderId) {
 
         Folder targetFolder = service.getFolderById(folderId);
-        Integer notFoundErrorCode = -1;
 
-        if(notFoundErrorCode.equals(targetFolder.getId())){
+        if (targetFolder == null) {
             throw new FolderNotFoundException();
-        }
-        else{
+        } else {
             return targetFolder;
         }
     }

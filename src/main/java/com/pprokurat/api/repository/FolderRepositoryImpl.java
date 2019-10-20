@@ -2,7 +2,6 @@ package com.pprokurat.api.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pprokurat.api.dto.FolderDto;
 import com.pprokurat.api.model.Folder;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +11,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +38,19 @@ public class FolderRepositoryImpl implements FolderRepository {
             int iByteCount = fis.read();
 
             //populate the folders list only if the input file is not empty
-            if(!(iByteCount == -1)){
+            if (iByteCount != -1) {
                 JsonNode jsonNode = objectMapper.readValue(inputFile, JsonNode.class);
-                Iterator<Map.Entry<String,JsonNode>> iterator = jsonNode.fields();
+                Iterator<Map.Entry<String, JsonNode>> iterator = jsonNode.fields();
 
-                while(iterator.hasNext()){
+                while (iterator.hasNext()) {
                     Map.Entry<String, JsonNode> currentIterator = iterator.next();
                     String key = currentIterator.getKey();
-                    Folder folder = objectMapper.readValue(currentIterator.getValue().toString(),Folder.class);
+                    Folder folder = objectMapper.readValue(currentIterator.getValue().toString(), Folder.class);
                     folder.setPath(key);
                     foldersList.add(folder);
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error: cannot read folder data file");
         }
 
@@ -62,44 +58,18 @@ public class FolderRepositoryImpl implements FolderRepository {
     }
 
     @Override
-    public List<FolderDto> getAll() {
-
-        List<FolderDto> targetFoldersList = new ArrayList<>();
-
-        Iterator<Folder> iterator = foldersList.iterator();
-
-        while(iterator.hasNext()){
-            Folder folder = iterator.next();
-            FolderDto dto = new FolderDto();
-
-            dto.setId(folder.getId());
-            dto.setPath(folder.getPath());
-
-            targetFoldersList.add(dto);
-        }
-
-        Collections.sort(targetFoldersList, new SortById());
-
-        return targetFoldersList;
+    public List<Folder> getAll() {
+        return foldersList;
     }
 
     @Override
     public Folder getOneById(Integer folderId) {
-        Folder targetFolder = new Folder();
-        targetFolder.setId(-1);
-
-        Iterator<Folder> iterator = foldersList.iterator();
-
-        while(iterator.hasNext()){
-            Folder folder = iterator.next();
-
-            if(folderId.equals(folder.getId())){
-                targetFolder = folder;
-                break;
+        for (Folder folder : foldersList) {
+            if (folderId.equals(folder.getId())) {
+                return folder;
             }
         }
-
-        return targetFolder;
+        return null;
     }
 
     private File getFileFromResources(String fileName) {
@@ -112,14 +82,6 @@ public class FolderRepositoryImpl implements FolderRepository {
         } else {
             return new File(resource.getFile());
         }
-
     }
 
-}
-
-class SortById implements Comparator<FolderDto> {
-
-    public int compare(FolderDto a, FolderDto b) {
-        return a.getId()-b.getId();
-    }
 }
