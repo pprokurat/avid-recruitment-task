@@ -1,7 +1,5 @@
 package com.pprokurat.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 
 public class Folder {
