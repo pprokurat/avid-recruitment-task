@@ -1,4 +1,4 @@
-package com.pprokurat.api.data;
+package com.pprokurat.api.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FolderRepository {
+public class FolderRepositoryImpl implements FolderRepository {
 
     private final ResourceConfiguration configuration;
     private static final List<Folder> foldersList = new ArrayList<>();
 
-    public FolderRepository(ResourceConfiguration configuration) {
+    public FolderRepositoryImpl(ResourceConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -55,13 +55,14 @@ public class FolderRepository {
             }
         }
         catch (IOException e) {
-            System.out.println("Error: cannot read folder data file.");
+            System.out.println("Error: cannot read folder data file");
         }
 
 
     }
 
-    public List<FolderDto> getTransferFoldersList() {
+    @Override
+    public List<FolderDto> getAll() {
 
         List<FolderDto> targetFoldersList = new ArrayList<>();
 
@@ -82,7 +83,8 @@ public class FolderRepository {
         return targetFoldersList;
     }
 
-    public Folder findFolderById(Integer folderId) {
+    @Override
+    public Folder getOneById(Integer folderId) {
         Folder targetFolder = new Folder();
         targetFolder.setId(-1);
 

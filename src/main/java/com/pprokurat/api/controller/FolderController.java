@@ -1,13 +1,12 @@
 package com.pprokurat.api.controller;
 
 import com.pprokurat.api.dto.FolderDto;
+import com.pprokurat.api.exception.FolderNotFoundException;
 import com.pprokurat.api.model.Folder;
 import com.pprokurat.api.service.FolderService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class FolderController {
         Integer notFoundErrorCode = -1;
 
         if(notFoundErrorCode.equals(targetFolder.getId())){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error: folder with provided ID not found");
+            throw new FolderNotFoundException();
         }
         else{
             return targetFolder;

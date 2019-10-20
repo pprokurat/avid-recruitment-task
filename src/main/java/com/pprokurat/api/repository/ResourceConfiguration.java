@@ -1,4 +1,4 @@
-package com.pprokurat.api.data;
+package com.pprokurat.api.repository;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
