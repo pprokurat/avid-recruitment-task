@@ -1,13 +1,11 @@
 package com.pprokurat.api.service;
 
 import com.pprokurat.api.dto.FolderDto;
-import com.pprokurat.api.exception.FolderNotFoundException;
 import com.pprokurat.api.model.Folder;
 import com.pprokurat.api.repository.FolderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,16 +22,14 @@ public class FolderServiceImpl implements FolderService {
      * @return list of folders (ID and path only)
      */
     @Override
-    public List<FolderDto> getFoldersList() throws FolderNotFoundException {
+    public List<FolderDto> getFoldersList() {
 
         List<Folder> foldersList = folderRepository.getAll();
         List<FolderDto> targetFoldersDtoList = new ArrayList<>();
 
         for (Folder folder : foldersList) {
-            FolderDto dto = new FolderDto();
 
-            dto.setId(folder.getId());
-            dto.setPath(folder.getPath());
+            FolderDto dto = new FolderDto(folder.getId(), folder.getPath());
 
             targetFoldersDtoList.add(dto);
         }
@@ -48,7 +44,7 @@ public class FolderServiceImpl implements FolderService {
      * @return particular folder object from the list (by ID)
      */
     @Override
-    public Folder getFolderById(Integer folderId) throws FolderNotFoundException {
+    public Folder getFolderById(Integer folderId) {
         return folderRepository.getOneById(folderId);
     }
 
