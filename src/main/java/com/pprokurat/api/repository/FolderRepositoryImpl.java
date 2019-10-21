@@ -57,11 +57,18 @@ public class FolderRepositoryImpl implements FolderRepository {
 
     }
 
+    /**
+     * @return list of all folders
+     */
     @Override
     public List<Folder> getAll() {
         return foldersList;
     }
 
+    /**
+     * @param folderId - particular folder ID
+     * @return single folder by ID
+     */
     @Override
     public Folder getOneById(Integer folderId) {
         for (Folder folder : foldersList) {
@@ -72,6 +79,10 @@ public class FolderRepositoryImpl implements FolderRepository {
         return null;
     }
 
+    /**
+     * @param fileName - name of file
+     * @return file from project resources
+     */
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();

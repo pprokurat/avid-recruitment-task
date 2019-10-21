@@ -40,7 +40,7 @@ public class FolderServiceImpl implements FolderService {
     }
 
     /**
-     * @param folderId folder ID
+     * @param folderId - particular folder ID
      * @return particular folder object from the list (by ID)
      */
     @Override
@@ -50,6 +50,9 @@ public class FolderServiceImpl implements FolderService {
 
 }
 
+/**
+ * sort folders by ID in ascending order
+ */
 class SortById implements Comparator<FolderDto> {
 
     public int compare(FolderDto a, FolderDto b) {
